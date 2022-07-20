@@ -1,0 +1,23 @@
+VALUES
+//utilizamos quando queremos criar uma tabela apenas com os anos puxando so dados de uma outra tabela, por exemplo
+//lembrar SEMPRE, que quando criamos uma tabela, precisamos relacionar com (aquela de origem, se for o caso) alguma outra para retornar o valor correto
+ANOS = VALUES (calendario[ANO])
+
+//VALUES
+//serve para voce criar uma tabela, seja ela visivel ou nao (que nesse caso a tabela fica dentro da formula)
+//fazer de uma forma MAIS INTELIGENTE, sem precisar criar uma nova tabela, ou seja, vamos fazer direto dentro da MEDIDA
+Media de faturamento anual =
+AVERAGEX(
+  VALUES(CALENDARIO[ANO]),
+  [FATURAMENTO TOTAL]
+)
+
+//COUNTROWS + FILTER + VALUES
+//se eu quiser filtrar os dados de uma tabela criada dentro de uma medida
+//aqui estamos contando APENAS os meses que tiveram um faturamento acima de 200 milhoes
+Meses = COUNTROWS(
+   FILTER(
+   VALUES(CALENDARIO[mes/ano]),
+   [faturamento] >= 200000000
+)
+)
