@@ -1,0 +1,19 @@
+% off total CM = 
+var soma_GI = CALCULATE(
+    'MR07 SPI'[22 CM Pesato],ALL('MR07 SPI')
+)
+var percentage = DIVIDE('MR07 SPI'[22 CM Pesato],soma_GI)
+var resultado = percentage
+return
+resultado
+ 
+ 
+//
+Bottom % off total = 
+SWITCH(
+    SELECTEDVALUE('MR07 SPI Bottom'[Tipo]),
+    "% off total CM", 'MR07 SPI'[% off total CM],
+    "% off GI", 'MR07 SPI'[% off GI])
+ 
+//
+Bottom text = " " & SELECTEDVALUE('MR07 SPI Bottom'[Tipo])
