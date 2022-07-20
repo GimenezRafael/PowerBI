@@ -1,0 +1,61 @@
+CALCULATE + ALL
+//serve para voce encontrar a % de cada item sobre o total
+ //o ideal è sempre colocar a sua tabela FATO para ele ignorar os filtros, pq assim è possivel fazer varias analises sem precisar ficar alterando oq esta dentro da condicao ALL
+//a diferenca de usar o ALLSELECT è que è possivel aplicar os filtros externos, ou seja esse è um FILTRO DINAMICO, como ANO, CLIENTES, e assim por diante
+//e se usassemos apenas a SELECT nao daria certo pq ela ignora TODOS os filtros
+TOTAL VENDAS FIXO =
+CALCULATE(
+   [TOTAL DE VENDAS],
+ALLSELECT ('BASE VENDAS')     
+)
+
+//a formula anterior foi utlizada para termos uma base para depois fazermos as nossas analises, porem podemos fazer direto em apenas uma formula, assim:
+% DE VENDAS  =
+Var total_vendas = [TOTAL DAS VENDAS] / 
+Var total_vendas_fixo = CALCULATE(
+   [TOTAL DE VENDAS],
+ALLSELECT ('BASE VENDAS')     
+)
+Return
+Total_vendas / total_vendas_fixo
+
+//OU
+//na formula nos podemos usar || quando forem poucos itens, ou podemos usar o IN pois ele nos permite colocar varios itens dentro de uma forma masi rapida e inteligente
+CALCULATE(
+   [TOTAL VENDAS],
+   'MARCA DOS PRODUTOS' [nome da marca] in {"contoso", "litware"
+}
+)
+
+//CALCULATE + FILTER + ||
+//se qusier levar em consideracao informacoes de tabelas diferentes, precisamos usar CALCULATE + FILTER
+//porque aqui queremos analisar dados de uma tabela E outra coluna de uma tabela diferente
+CALCULATE(
+   [TOTAL DE VENDAS],
+   FILTER(
+    'MARCA DOS PRODUTOS' [nome da marca] = "contoso" ||
+   'CADASTRO DE PRODUTOS' [TIPO] = "luxo"
+   )
+)
+
+//CALCULATE + FILTER + CONTAINSSTRING
+//usamos essa funcao para invocar dados de alguma palavra especifica dentro da coluna
+//LINK AULA: Hashtag (eadplataforma.com)
+Total vendas bluetooth =
+CALCULATE(
+   [TOTAL VENDAS],
+   FILTER(
+      CONTAINSSTRING('CADASTRO DE PRODUTOS' [NOME DO PRODUTO], "BLUETOOTH"
+     )
+   )
+)
+
+//CALCULO DO ACUMULADO AO LONGO DO TEMPO
+//CALCULATE + FILTER + ALL
+TOTAL ACUMULADO =
+CALCULATE(
+  [TOTAL VENDAS],
+  FILTER(ALL('CALENDARIO'),
+  'CALENDARIO' [DATAS] <= MAX('CALENDARIO [DATAS])
+   )
+)
