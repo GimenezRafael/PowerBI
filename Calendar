@@ -1,0 +1,20 @@
+Tabela calendario
+Estou criando uma tabela calendario para poder aplicar filtros, comparar periodos, performance e FC.
+
+Calendario =
+Var data_inicio = DATE(YEAR(MIN('Base',[Data da Venda]))1,1)       //invoquei o ano mais ANTIGO e disse que o mes è = 1 e o dia  = 1
+Var data_fim = DATE(YEAR(MAX(('Base',[Data da Venda]))12,31)      //invoquei o ano mais NOVO e disse que o mes è = 12 e o dia  = 31
+Return
+CALENDAR = (data_inicio, data_fim)
+
+//adicionar colonas na tabela calendário 
+Ex: numero do mes = datas.mesNo
+
+//adicionar o início do mes
+Inicio do mes = startofmonth(datas)
+
+//FORMAT
+//formatar a visualizacao das datas. Nesse caso vamos ver assim 1-2022, 2-2202, 3-2022,4-2022 (pois sao os quarters do ano)
+//e por ultimo precimos classificar essa nova coluna criada dentro da tabela CALENDARIO, em ordem cronologica da seguinte forma
+//clicar na coluna DATA PERSONALIZADA, classificar por coluna, inicio do trimestre
+DATA PERSONALIZADA = FORMAT(CALENDARIO[DATAS] = "Q-YYYY")
