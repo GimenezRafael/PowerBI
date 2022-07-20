@@ -1,0 +1,366 @@
+Nesse arquvio, disponibilizo as formulas utilizadas para criar os KPIS dentro dos 5 Dashboards:
+Consolidamento: onde é possivel analisarmos a perfomrnace mensal e fazer o confronto entre os meses
+MR: Detalhes mensais onde podemos ver os nosso Top 10 clientes por GI e CM, e também o valor mensal e YTD
+Pipline: Possivel vermos onde se encontra a maior concentracao de receita em cada etapa da negociacao com os clientes
+Tabela: Criei uma tabela detalhada para cada cliente, assim é possivel analisarmos a performance ao longo do tempo para cada um
+P&L: Detalhe mensal de GI, CM, Custos detalhados por categoria, FC e BU
+
+01 Existing GI_MR08 = CALCULATE(
+    SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="existing client",
+    'Consol MR08,MR07'[Valori]="GROSS INCOME"
+)
+
+02 NPA_GI SP MR08 = CALCULATE(
+     SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="new project available",
+    'Consol MR08,MR07'[Valori]="gross income"
+)
+
+03 Farming 80%_GI SP_MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="FARMING 80%",
+    'Consol MR08,MR07'[Valori]="gross income"
+)
+
+var FARMING_GI_80_SP = soma_SP_MR08*0.8
+var resultado = FARMING_GI_80_SP
+return
+resultado
+
+04 Pitch 30%_GI SP_MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="Pitch 30%",
+    'Consol MR08,MR07'[Valori]="gross income"
+)
+var NB_GI_30_SP = soma_SP_MR08*0.3
+var resultado = NB_GI_30_SP
+return
+resultado
+
+
+05 Existing Client_CM_MR08 = CALCULATE(
+    SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="existing client",
+    'Consol MR08,MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+
+
+06 NPA_CM SP_MR08 = CALCULATE(
+     SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="new project available",
+    'Consol MR08,MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+
+
+07 Farming 80%_CM SP_MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="FARMING 80%",
+    'Consol MR08,MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+var FARMING_CM_80_SP = soma_SP_MR08*0.8
+var resultado = FARMING_CM_80_SP
+return
+resultado
+
+
+08 Pitch 30%_CM SP_MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUM('Consol MR08,MR07'[Total]),
+    'Consol MR08,MR07'[Agenzia]="SPI",
+    'Consol MR08,MR07'[Periodo]="MR08",
+    'Consol MR08,MR07'[STATUS]="Pitch 30%",
+    'Consol MR08,MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+var NB_CM_30_SP = soma_SP_MR08*0.3
+var resultado = NB_CM_30_SP
+return
+resultado
+
+09A UNB_GI SOL_MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUM('Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SOL",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="UPITCH 30%",
+    'Consol MR08_MR07'[Valori]="GROSS INCOME"
+)
+return
+soma_SP_MR08
+
+
+09B UNB_GI SOL_MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUM('Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SOL",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="UPITCH 30%",
+    'Consol MR08_MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+return
+soma_SP_MR08
+
+
+10 GI_Pesato SP_MR08 = CALCULATE(
+    'MR08_SPI'[01 Existing Client_GI_MR08_]+'MR08_SPI'[02 NPA_GI SP_MR08]+'MR08_SPI'[03 Farming 80%_GI SP_MR08]+'MR08_SPI'[04 Pitch 30%_GI SP_MR08]
+)
+
+
+11 CM_Pesato SP_MR08 = CALCULATE(
+'MR08_SPI'[05 Existing Client_CM_MR08]+'MR08_SPI'[06 NPA_CM SP_MR08]+'MR08_SPI'[07 Farming 80%_CM SP_MR08]+'MR08_SPI'[08 Pitch 30%_CM SP_MR08]
+)
+
+
+12 % TOP10 GI SP_MR08 = 
+var SUMX_GI = CALCULATE(
+    'MR08_SPI'[10 GI_Pesato SP_MR08],ALL('MR08_SPI')
+)
+var percentage = DIVIDE('MR08_SPI'[10 GI_Pesato SP_MR08],SUMX_GI)
+return
+percentage
+
+
+13 % TOP10 CM SP_MR08 = 
+var SUMX_GI = CALCULATE(
+    'MR08_SPI'[11 CM_Pesato SP_MR08],ALL('MR08_SPI')
+)
+var percentage = DIVIDE('MR08_SPI'[11 CM_Pesato SP_MR08],SUMX_GI)
+return
+percentage
+
+
+14 Pipeline 01_SP_MR08_histo_GI_% = 
+var parte1 = 'MR08_SPI'[10 GI_Pesato SP_MR08]-'MR08_SPI'[04 Pitch 30%_GI SP_MR08]
+var parte2 = CALCULATE(
+   parte1,ALL('MR08_SPI')
+)
+var parte3 = DIVIDE(parte1,parte2)
+return
+parte3
+
+
+15 Pipeline 02_SP_MR08_histo_CM_% = 
+var parte1 = 'MR08_SPI'[11 CM_Pesato SP_MR08]-'MR08_SPI'[08 Pitch 30%_CM SP_MR08]
+var parte2 = CALCULATE(
+   parte1,ALL('MR08_SPI')
+)
+var parte3 = DIVIDE(parte1,parte2)
+return
+parte3
+
+
+16 YTD_SP_MR08_GI = CALCULATE(
+    'MR08_SPI'[10 GI_Pesato SP_MR08],
+    DATESYTD('Consol MR08,MR07'[DATE], "30/6")
+)
+
+
+17 YTD_SP_MR08_CM = CALCULATE(
+    'MR08_SPI'[11 CM_Pesato SP_MR08],
+    DATESYTD('Consol MR08,MR07'[DATE], "30/6")
+)
+
+18 % off GI SOL = DIVIDE('MR07 SOL'[11 CM_Pesato SOLU_c],'MR07 SOL'[10 GI_Pesato SOLU_c])
+
+19 CM % hist SP MR08 = 
+var soma_GI = CALCULATE(
+    'MR08_SPI'[11 CM_Pesato SP_MR08] ,ALL('MR08_SPI')
+)
+var percentage = DIVIDE('MR08_SPI'[11 CM_Pesato SP_MR08],soma_GI)
+var resultado = percentage
+return
+resultado
+
+
+20 GI % hist SP MR08 = 
+var soma_GI = CALCULATE(
+    'MR08_SPI'[10 GI_Pesato SP_MR08],ALL('MR08_SPI')
+)
+var percentage = DIVIDE('MR08_SPI'[10 GI_Pesato SP_MR08],soma_GI)
+var resultado = percentage
+return
+Resultado
+
+
+20a TOP10 GI SPI = IF(
+    HASONEVALUE('Consol MR08_MR07'[Business Customers]),
+        RANKX(ALL('Consol MR08_MR07'[Business Customers]),'Consol MR08_MR07'[10 GI_Pesato SP MR08]),"")
+
+
+20b TOP10 CM SPI = IF(
+    HASONEVALUE('Consol MR08_MR07'[Business Customers]),
+        RANKX(ALL('Consol MR08_MR07'[Business Customers]),'Consol MR08_MR07'[11 CM_Pesato SP MR08]),"")
+
+
+//CONSOL MR08_MR07
+01 Existing SPI GI_MR08 = CALCULATE(
+    SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="existing client",
+    'Consol MR08_MR07'[Valori]="GROSS INCOME"
+)
+
+
+02 NPA_GI SP MR08 = CALCULATE(
+     SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="new project available",
+    'Consol MR08_MR07'[Valori]="gross income"
+)
+
+
+
+03 Farming 80%_GI SP MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="FARMING 80%",
+    'Consol MR08_MR07'[Valori]="gross income"
+)
+var FARMING_GI_80_SP = soma_SP_MR08*0.8
+var resultado = FARMING_GI_80_SP
+return
+resultado
+
+
+04 Pitch 30%_GI SP MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="Pitch 30%",
+    'Consol MR08_MR07'[Valori]="gross income"
+)
+var NB_GI_30_SP = soma_SP_MR08*0.3
+var resultado = NB_GI_30_SP
+return
+resultado
+
+
+05 Existing Client_CM MR08 = CALCULATE(
+    SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="existing client",
+    'Consol MR08_MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+
+
+
+06 NPA_CM SP MR08 = CALCULATE(
+     SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="new project available",
+    'Consol MR08_MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+
+
+
+07 Farming 80%_CM SP MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="FARMING 80%",
+    'Consol MR08_MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+var FARMING_CM_80_SP = soma_SP_MR08*0.8
+var resultado = FARMING_CM_80_SP
+return
+resultado
+
+
+08 Pitch 30%_CM SP MR08 = 
+var soma_SP_MR08 = CALCULATE(
+    SUMX('Consol MR08_MR07','Consol MR08_MR07'[Total]),
+    'Consol MR08_MR07'[Agenzia]="SPI",
+    'Consol MR08_MR07'[Periodo]="MR08",
+    'Consol MR08_MR07'[STATUS]="Pitch 30%",
+    'Consol MR08_MR07'[Valori]="CONTRIBUTION MARGIN"
+)
+var NB_CM_30_SP = soma_SP_MR08*0.3
+var resultado = NB_CM_30_SP
+return
+resultado
+
+
+10 GI_Pesato SP MR08 = CALCULATE(
+    'Consol MR08_MR07'[01 Existing SPI GI_MR08]+'Consol MR08_MR07'[02 NPA_GI SP MR08]+'Consol MR08_MR07'[03 Farming 80%_GI SP MR08]+'Consol MR08_MR07'[04 Pitch 30%_GI SP MR08]
+)
+
+
+11 CM_Pesato SP MR08 = CALCULATE(
+    'Consol MR08_MR07'[05 Existing Client_CM MR08]+'Consol MR08_MR07'[06 NPA_CM SP MR08]+'Consol MR08_MR07'[07 Farming 80%_CM SP MR08]+'Consol MR08_MR07'[08 Pitch 30%_CM SP MR08]
+)
+
+
+12 %_GI SP MR08 = 
+var SUMX_GI = CALCULATE(
+    'Consol MR08_MR07'[10 GI_Pesato SP MR08],ALL('Consol MR08_MR07')
+)
+var percentage = DIVIDE('Consol MR08_MR07'[10 GI_Pesato SP MR08],SUMX_GI)
+return
+percentage
+
+
+13 %_CM SP MR08 = 
+var SUMX_GI = CALCULATE(
+    'Consol MR08_MR07'[11 CM_Pesato SP MR08],ALL('Consol MR08_MR07')
+)
+var percentage = DIVIDE('Consol MR08_MR07'[11 CM_Pesato SP MR08],SUMX_GI)
+return
+percentage
+
+
+14 Pipeline 01_SP_MR08_histo_GI % = 
+var parte1 = 'Consol MR08_MR07'[10 GI_Pesato SP MR08]-'Consol MR08_MR07'[03 Farming 80%_GI SP MR08]
+var parte2 = CALCULATE(
+   parte1,ALL('Consol MR08_MR07')
+)
+var parte3 = DIVIDE(parte1,parte2)
+return
+parte3
+
+
+15 Pipeline 02_SP_MR08_histo_CM % = 
+var parte1 = 'Consol MR08_MR07'[11 CM_Pesato SP MR08]-'Consol MR08_MR07'[08 Pitch 30%_CM SP MR08]
+var parte2 = CALCULATE(
+   parte1,ALL('Consol MR08_MR07')
+)
+var parte3 = DIVIDE(parte1,parte2)
+return
+parte3
+
+
+16 YTD_SP_MR08 GI = CALCULATE(
+    'Consol MR08_MR07'[10 GI_Pesato SP MR08],
+    DATESYTD('Consol MR08_MR07'[DATE], "30/6")
+)
+
+
+
+17 YTD_SP_MR08 CM = CALCULATE(
+    'Consol MR08_MR07'[11 CM_Pesato SP MR08],
+    DATESYTD('Consol MR08_MR07'[DATE], "30/6")
+)
