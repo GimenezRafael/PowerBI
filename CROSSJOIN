@@ -1,0 +1,11 @@
+//CROSSJOIN
+//cria uma tabela gigante com todas as combinacoes possiveis
+//e vamos pedir para ele calcular a media de faturamento total
+Meses e lojas = 
+AVERAGEX(
+  CROSS JOIN(
+      VALUE(CADASTRO LOJAS[NOME DA LOJA]),          //estamos dizendo para criar essa tabela com APENAS os nomes das lojas
+      VALUE(Calendario[MESE/ANO])                  //estamos dizendo para criar essa tabela com APENAS os meses do ano
+), 
+ [FATURAMENTO TOTAL]
+)
